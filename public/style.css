@@ -1,0 +1,37 @@
+/* for array bars */
+.array-container {
+    position: absolute;
+    margin: 100px;
+  
+  }
+  
+.array-bar {
+  width: 10px;
+  display: inline-block;
+  margin: 0 2.5px;
+}
+
+
+/* user input section */
+.user-choice{
+  background-color: lightgrey;
+  margin:10px;
+  padding: 40px;
+}
+p{
+  text-align: left;
+  font-weight: bold;
+}
+button{
+  background-color:lightblue;
+  float: right;
+  /* margin: 15px;
+  padding: 10px; */
+}
+select{
+  background-color:lightpink;
+  float: right;
+  margin: 2.5px;
+  /* margin: 15px; */
+  /* padding: 10px; */
+}
