@@ -5,7 +5,7 @@ Fascinated by the varieties of sorting algorithms and insired by Clement Mihaile
 - Selection Sort
 - Insertion Sort
 
-You can access this visualizer using this link: ............
+You can access this visualizer using this link: http://192.168.4.220:3000 
 
 Features to be implemted: 
 - Allow the user to choose how many bars they want (i.e., the length of the array)
