@@ -6,14 +6,11 @@ import {getInsertionSortAnimations} from '../algorithms/insertionSort'
 import {getQuickSortAnimations} from '../algorithms/quickSort'
 
 
-
-// Change this value for the speed of the animations.
-let regularSpeed = 15;
-let animationSpeed = regularSpeed;
-
-// Disable the button one sorting is in progress  
 const PRIMARY_COLOR = 'lightgrey';
 const SECONDARY_COLOR = 'darkblue';
+const REGULAR_SPEED = 10;
+// Change this value for the speed of the animations.
+let animationSpeed = REGULAR_SPEED;
 
 
 export default class SortingVisualizer extends Component {
@@ -26,6 +23,7 @@ export default class SortingVisualizer extends Component {
     componentDidMount(){
         this.generateArray();   
     }
+
     generateArray(){
         const arr = [];
         for (let i = 0; i<50; i++){ // making 50 bars
@@ -33,38 +31,47 @@ export default class SortingVisualizer extends Component {
         }
         this.setState({array : arr});
         //also set all buttons / select to default 
-        animationSpeed = regularSpeed;
-        document.getElementById('choose-speed').value = 'normal';
+        animationSpeed = REGULAR_SPEED;
+        document.getElementById('choose-speed').value = 'default';
         document.getElementById('slower-algo').value = 'default';
         document.getElementById('faster-algo').value = 'default';
-
+    }
+    handleEnableSelection(){ // enable the selection after generate a new array 
+        const disableList = document.getElementsByClassName('mayDisable');
+        for (let i = 0;i< disableList.length; i++){
+            disableList[i].disabled= !disableList[i].disabled;
+        }
+    }
+    handleEnableGenerate(){
+        const generateButton = document.getElementById('generate')
+        generateButton.disabled = !generateButton.disabled;
     }
 
-    handleSelection1 (event){ // select slower algo 
-        this.handleEnable();
+    generateArrayAndEnableSelection(){
+        this.generateArray();
+        this.handleEnableSelection();
+    }
+
+    handleSelectSlowerAlgo (event){ // select slower algo 
+        this.handleEnableSelection()//once selected, disable all the button 
+        this.handleEnableGenerate();
         let val = event.target.value;
         if (val === 'bubbleSort') this.bubbleSort();
         else if (val ==='selectionSort') this.selectionSort();
         else if (val ==='insertionSort') this.insertionSort();
     }
 
-    handleSelection2 (event){ // select faster algo 
-        this.handleEnable();
+    handleSelectFasterAlgo (event){ // select faster algo 
+        this.handleEnableSelection() //once selected, disable all the button 
+        this.handleEnableGenerate();
         let val = event.target.value;
         if (val === 'mergeSort')   this.mergeSort();
         else if (val === 'quickSort') this.quickSort();
     }
-    handleSelectionSpeed (event){
+    handleSelectSpeed (event){
         let val = event.target.value;
-        if (val === 'slow') animationSpeed = 50;
+        if (val === 'slow') animationSpeed = 30;
         else if (val === 'fast') animationSpeed = 1;
-    }
-
-    handleEnable(){
-        const disableList = document.getElementsByClassName('mayDisable');
-        for (let i = 0;i< disableList.length; i++){
-            disableList[i].disabled= !disableList[i].disabled;
-        }
     }
 
     /////////////////////////////////////////// SORTING ///////////////////
@@ -85,15 +92,18 @@ export default class SortingVisualizer extends Component {
                 setTimeout(() => {
                 barOneStyle.backgroundColor = color;
                 barTwoStyle.backgroundColor = color;
+                // if (i === animations.length-1) this.handleEnable();
                 }, i * animationSpeed);
             } else { 
                 setTimeout(() => {
                 const [barIdx, newHeight] = animations[i];
                 const barStyle = arrayBars[barIdx].style;
                 barStyle.height = `${newHeight}px`;
+                // if (i === animations.length-1) this.handleEnable();
                 }, i * animationSpeed);
             }
         }
+        setTimeout(() => this.handleEnableGenerate(), parseInt(animationSpeed*animations.length + 500));  
         console.log('after merge sort', this.state.array);
     }
     //O(n^2) sort 
@@ -118,8 +128,8 @@ export default class SortingVisualizer extends Component {
                 barStyle.height = `${newHeight}px`;
                 }, i * animationSpeed);
             }
-
         }
+        setTimeout(() => this.handleEnableGenerate(), parseInt(animationSpeed*animations.length + 500));  
         console.log('after bubble sort', this.state.array);
     }
     selectionSort(){
@@ -134,8 +144,8 @@ export default class SortingVisualizer extends Component {
                 const barOneStyle = arrayBars[barOneIdx].style;
                 const barTwoStyle = arrayBars[barTwoIdx].style;
                 setTimeout(() => {
-                    barOneStyle.backgroundColor = color;
-                    barTwoStyle.backgroundColor = color;
+                barOneStyle.backgroundColor = color;
+                barTwoStyle.backgroundColor = color;
                 },i * animationSpeed);
             }
             else {
@@ -143,11 +153,11 @@ export default class SortingVisualizer extends Component {
                 const newHeight = animations[i][2];
                 const barStyle = arrayBars[barIdx].style;
                 setTimeout(() => {
-                    barStyle.height = `${newHeight}px`;
+                barStyle.height = `${newHeight}px`;
                 },i * animationSpeed);  
             }
         }
-
+        setTimeout(() => this.handleEnableGenerate(), parseInt(animationSpeed*animations.length + 500));  
         console.log('after selection sort', this.state.array);
     }
 
@@ -163,8 +173,8 @@ export default class SortingVisualizer extends Component {
                 const barOneStyle = arrayBars[barOneIdx].style;
                 const barTwoStyle = arrayBars[barTwoIdx].style;
                 setTimeout(() => {
-                    barOneStyle.backgroundColor = color;
-                    barTwoStyle.backgroundColor = color;
+                barOneStyle.backgroundColor = color;
+                barTwoStyle.backgroundColor = color;
                 },i * animationSpeed);
             }
             else {
@@ -172,10 +182,11 @@ export default class SortingVisualizer extends Component {
                 const newHeight = animations[i][2];
                 const barStyle = arrayBars[barIdx].style;
                 setTimeout(() => {
-                    barStyle.height = `${newHeight}px`;
+                barStyle.height = `${newHeight}px`;
                 },i * animationSpeed);  
             }
         }
+        setTimeout(() => this.handleEnableGenerate(), parseInt(animationSpeed*animations.length + 500));  
         console.log('after insertion sort', this.state.array);
 
     }
@@ -191,8 +202,8 @@ export default class SortingVisualizer extends Component {
                 const barOneStyle = arrayBars[barOneIdx].style;
                 const barTwoStyle = arrayBars[barTwoIdx].style;
                 setTimeout(() => {
-                    barOneStyle.backgroundColor = color;
-                    barTwoStyle.backgroundColor = color;
+                barOneStyle.backgroundColor = color;
+                barTwoStyle.backgroundColor = color;
                 },i * animationSpeed);
             }
             else {
@@ -201,18 +212,19 @@ export default class SortingVisualizer extends Component {
                 if (barIdx === -1) continue;
                 const barStyle = arrayBars[barIdx].style;
                 setTimeout(() => {
-                    barStyle.height = `${newHeight}px`;
+                barStyle.height = `${newHeight}px`;
                 },i * animationSpeed);  
              }    
         }
+        setTimeout(() => this.handleEnableGenerate(), parseInt(animationSpeed*animations.length + 500));  
         console.log('after quick sort', this.state.array);
     }
     
     render() {
         console.log('before sorting', this.state.array);
         return (
-          
-            <div className = 'array-container'>
+            <>
+            <div className = 'all-container'>
                 <h1 className = 'header'> Welcome to the Sorting Visualizer</h1> 
                 <div className = 'info-panel'>
                     <span className = 'color1'>  </span>
@@ -221,42 +233,42 @@ export default class SortingVisualizer extends Component {
                     <span> Color of the Bars Being Processed Now </span>
                 </div>
 
+                <div className = 'array-container'>
                 {this.state.array.map((num, idx) =>{
                     return <div className = 'array-bar' key = {idx} style={{height: `${num}px`, backgroundColor : PRIMARY_COLOR}}>
                     </div>
                 })}
+                </div>
                    
                 <p >Click the button to generate a random array of length 50: 
-                <button className = 'mayDisable' onClick = {() => this.generateArray()}> Generate A New Array</button>
+                <button id = 'generate' onClick = {() => this.generateArrayAndEnableSelection()}> Generate A New Array</button>
                 </p>
 
-                <p>Choose your preferred speed (Default: Normal): 
-                <select  id = 'choose-speed'className = 'mayDisable' defaultValue = 'normal' onChange = {(e) => this.handleSelectionSpeed(e)}>
+                <p>Choose your preferred speed: 
+                <select  disabled = 'disabled' id = 'choose-speed'className = 'mayDisable'  onChange = {(e) => this.handleSelectSpeed(e)}>
+                    <option value = 'default'>  --Choose the Speed Below--</option>
                     <option value = 'slow'> Slow Speed</option>
-                    <option  value = 'normal' > Normal Speed</option>
+                    <option value = 'normal' > Normal Speed</option>
                     <option value = 'fast'> Fast Speed</option>
                 </select>
                 </p>
                 
                 <p>Choose your sorting algorithm: 
-                <select id = 'slower-algo' className = 'mayDisable' onChange = {(e) => this.handleSelection1(e)}>
-                    <option value = 'default'>  Avg. O(N^2) time </option>
+                <select disabled = 'true' id = 'slower-algo' className = 'mayDisable' onChange = {(e) => this.handleSelectSlowerAlgo(e)}>
+                    <option value = 'default'>  --Avg. O(N^2) time-- </option>
                     <option value = 'bubbleSort'> Run Bubble Sort</option>
                     <option value = 'selectionSort'>Run Selection Sort</option>
                     <option value = 'insertionSort'>Run Insertion Sort</option>
                 </select>
-                <select  id = 'faster-algo' className = 'mayDisable' onChange = {(e) => this.handleSelection2(e)}>
-                    <option  value = 'default'> Avg. O(N*LogN) time  </option>
+                <select  disabled = 'true' id = 'faster-algo' className = 'mayDisable' onChange = {(e) => this.handleSelectFasterAlgo(e)}>
+                    <option value = 'default'> --Avg. O(N*LogN) time-- </option>
                     <option value = 'mergeSort' > Run Merge Sort</option>
                     <option value = 'quickSort'> Run Quick Sort</option>
                 </select>
                 </p>
                 
-                <p >Click the button when you are finished and want to start another round: 
-                <button id = 'restart-btn' onClick = {() => this.handleEnable()}> Start Over</button>
-                </p>
- 
             </div>
+            </>
         )
     }
 }

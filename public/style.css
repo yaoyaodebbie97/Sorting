@@ -1,13 +1,21 @@
+.all-container {
+  position: absolute;
+  margin-left: 100px;
+}
 /* for array bars */
-.array-container {
-    position: absolute;
-    margin-left: 100px;
-  }
-  
+
+.array-container{
+  display: flex;
+  height: 410px;
+  margin-bottom: 10px;
+}
+
 .array-bar {
   width: 10px;
   display: inline-block;
   margin: 0 2.5px;
+  /* using flex, align-self to the bottom */
+  align-self: end;
 }
 
 /* user input section */
@@ -21,9 +29,11 @@ p{
 button{
   background-color:lightblue;
   float: right;
-  border:none;
+  border: none;
   border-radius:10px;
   cursor: pointer;
+  text-align: center;
+  font-weight: bold;
 }
 select{
   background-color:lightgreen;
@@ -31,10 +41,15 @@ select{
   margin: 2.5px;
   border-radius:10px;
   cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+}
+#choose-speed{
+  background-color:lightpink;
 }
 
 
-/* info panel for the legend */
+/* Header and info panel for the legend */
 .header{
   margin-bottom: 50px;
 
