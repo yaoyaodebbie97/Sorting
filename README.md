@@ -8,7 +8,6 @@ Fascinated by the varieties of sorting algorithms and insired by Clement Mihaile
 You can access this visualizer using this link: ............
 
 Features to be implemted: 
-
 - Allow the user to choose how many bars they want (i.e., the length of the array)
 - Allow the uswer to stop any program that is currently running 
 - Add some explanations to each sort algorithm
