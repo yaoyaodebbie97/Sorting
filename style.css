@@ -1,0 +1,72 @@
+.all-container {
+  position: absolute;
+  margin-left: 100px;
+}
+/* for array bars */
+
+.array-container{
+  display: flex;
+  height: 410px;
+  margin-bottom: 10px;
+}
+
+.array-bar {
+  width: 10px;
+  display: inline-block;
+  margin: 0 2.5px;
+  /* using flex, align-self to the bottom */
+  align-self: end;
+}
+
+/* user input section */
+p{
+  border: 3px solid black;
+  margin:10px;
+  padding: 10px;
+  text-align: left;
+  font-weight: bold;
+}
+button{
+  background-color:lightblue;
+  float: right;
+  border: none;
+  border-radius:10px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+}
+select{
+  background-color:lightgreen;
+  float: right;
+  margin: 2.5px;
+  border-radius:10px;
+  cursor: pointer;
+  text-align: center;
+  font-weight: bold;
+}
+#choose-speed{
+  background-color:lightpink;
+}
+
+
+/* Header and info panel for the legend */
+.header{
+  margin-bottom: 50px;
+
+}
+.info-panel{
+  margin-bottom: 50px;
+}
+.color1{
+  border-radius: 5px;
+  background-color:lightgrey;
+  padding: 10px;
+  margin-right: 2px;
+}
+.color2{
+  border-radius: 5px;
+  background-color:darkblue;
+  padding: 10px;
+  margin-left: 100px;
+  margin-right: 2px;
+}
