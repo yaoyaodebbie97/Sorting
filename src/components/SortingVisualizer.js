@@ -245,7 +245,7 @@ export default class SortingVisualizer extends Component {
                 </p>
 
                 <p>Choose your preferred speed: 
-                <select  disabled = 'disabled' id = 'choose-speed'className = 'mayDisable'  onChange = {(e) => this.handleSelectSpeed(e)}>
+                <select  disabled = {true} id = 'choose-speed'className = 'mayDisable'  onChange = {(e) => this.handleSelectSpeed(e)}>
                     <option value = 'default'>  --Choose the Speed Below--</option>
                     <option value = 'slow'> Slow Speed</option>
                     <option value = 'normal' > Normal Speed</option>
@@ -254,13 +254,13 @@ export default class SortingVisualizer extends Component {
                 </p>
                 
                 <p>Choose your sorting algorithm: 
-                <select disabled = 'true' id = 'slower-algo' className = 'mayDisable' onChange = {(e) => this.handleSelectSlowerAlgo(e)}>
+                <select disabled = {true} id = 'slower-algo' className = 'mayDisable' onChange = {(e) => this.handleSelectSlowerAlgo(e)}>
                     <option value = 'default'>  --Avg. O(N^2) time-- </option>
                     <option value = 'bubbleSort'> Run Bubble Sort</option>
                     <option value = 'selectionSort'>Run Selection Sort</option>
                     <option value = 'insertionSort'>Run Insertion Sort</option>
                 </select>
-                <select  disabled = 'true' id = 'faster-algo' className = 'mayDisable' onChange = {(e) => this.handleSelectFasterAlgo(e)}>
+                <select  disabled = {true} id = 'faster-algo' className = 'mayDisable' onChange = {(e) => this.handleSelectFasterAlgo(e)}>
                     <option value = 'default'> --Avg. O(N*LogN) time-- </option>
                     <option value = 'mergeSort' > Run Merge Sort</option>
                     <option value = 'quickSort'> Run Quick Sort</option>
