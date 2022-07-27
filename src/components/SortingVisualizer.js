@@ -3,6 +3,7 @@ import {getMergeSortAnimations} from '../algorithms/mergeSort'
 import {getBubbleSortAnimations} from '../algorithms/bubbleSort'
 import {getSelectionSortAnimations} from '../algorithms/selectionSort'
 import {getInsertionSortAnimations} from '../algorithms/insertionSort'
+import {getQuickSortAnimations} from '../algorithms/quickSort'
 
 
 
@@ -36,7 +37,6 @@ export default class SortingVisualizer extends Component {
         document.getElementById('choose-speed').value = 'normal';
         document.getElementById('slower-algo').value = 'default';
         document.getElementById('faster-algo').value = 'default';
-        console.log( document.getElementById('choose-speed'))
 
     }
 
@@ -52,10 +52,7 @@ export default class SortingVisualizer extends Component {
         this.handleEnable();
         let val = event.target.value;
         if (val === 'mergeSort')   this.mergeSort();
-        // set back choices after sort 
-        // event.target.value = 'original'
-        // ANIMATION_SPEED_MS = regularSpeed;
-        // document.getElementById('normal-speed').selected = true;
+        else if (val === 'quickSort') this.quickSort();
     }
     handleSelectionSpeed (event){
         let val = event.target.value;
@@ -184,10 +181,33 @@ export default class SortingVisualizer extends Component {
     }
     
     quickSort(){
+        const animations= getQuickSortAnimations(this.state.array);
+        for (let i = 0; i < animations.length; i++) {
+            const arrayBars = document.getElementsByClassName('array-bar');
+            if(animations[i][0] === 1 || animations[i][0] === 2) {
+                const color = animations[i][0] === 1 ? SECONDARY_COLOR : PRIMARY_COLOR;
+                const barOneIdx = animations[i][1];
+                const barTwoIdx = animations[i][2];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = color;
+                    barTwoStyle.backgroundColor = color;
+                },i * animationSpeed);
+            }
+            else {
+                const barIdx = animations[i][1];
+                const newHeight = animations[i][2];
+                if (barIdx === -1) continue;
+                const barStyle = arrayBars[barIdx].style;
+                setTimeout(() => {
+                    barStyle.height = `${newHeight}px`;
+                },i * animationSpeed);  
+             }    
+        }
+        console.log('after quick sort', this.state.array);
     }
-    heapSort(){
-    }
-  
+    
     render() {
         console.log('before sorting', this.state.array);
         return (
@@ -212,9 +232,9 @@ export default class SortingVisualizer extends Component {
 
                 <p>Choose your preferred speed (Default: Normal): 
                 <select  id = 'choose-speed'className = 'mayDisable' defaultValue = 'normal' onChange = {(e) => this.handleSelectionSpeed(e)}>
-                    <option value = 'slow'> Slow</option>
-                    <option  value = 'normal' > Normal</option>
-                    <option value = 'fast'> Fast</option>
+                    <option value = 'slow'> Slow Speed</option>
+                    <option  value = 'normal' > Normal Speed</option>
+                    <option value = 'fast'> Fast Speed</option>
                 </select>
                 </p>
                 
