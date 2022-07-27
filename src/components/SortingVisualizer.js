@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
 import {getMergeSortAnimations} from '../algorithms/mergeSort'
+import {getBubbleSortAnimations} from '../algorithms/bubbleSort'
+import {getSelectionSortAnimations} from '../algorithms/selectionSort'
+import {getInsertionSortAnimations} from '../algorithms/insertionSort'
+
 
 
 // Change this value for the speed of the animations.
@@ -18,21 +22,21 @@ export default class SortingVisualizer extends Component {
             array:[],
         }
     }
-
     componentDidMount(){
         this.generateArray();   
     }
-
     generateArray(){
         const arr = [];
         for (let i = 0; i<50; i++){ // making 50 bars
-            arr.push(Math.floor(Math.random() * 500) + 1) // generate a random number between 1 and 500 (inclusive), allow duplicates 
+            arr.push(Math.floor(Math.random() * 400) + 1) // generate a random number between 1 and 400 (inclusive), allow duplicates 
         }
         this.setState({array : arr});
         //also set all buttons / select to default 
-        document.getElementById('normal-speed').selected = true;
-        document.getElementById('slower-algo').selected = true;
-        document.getElementById('faster-algo').selected = true;
+        animationSpeed = regularSpeed;
+        document.getElementById('choose-speed').value = 'normal';
+        document.getElementById('slower-algo').value = 'default';
+        document.getElementById('faster-algo').value = 'default';
+        console.log( document.getElementById('choose-speed'))
 
     }
 
@@ -40,7 +44,10 @@ export default class SortingVisualizer extends Component {
         this.handleEnable();
         let val = event.target.value;
         if (val === 'bubbleSort') this.bubbleSort();
+        else if (val ==='selectionSort') this.selectionSort();
+        else if (val ==='insertionSort') this.insertionSort();
     }
+
     handleSelection2 (event){ // select faster algo 
         this.handleEnable();
         let val = event.target.value;
@@ -52,10 +59,10 @@ export default class SortingVisualizer extends Component {
     }
     handleSelectionSpeed (event){
         let val = event.target.value;
-        if (val === 'slow') animationSpeed = regularSpeed + 85;
-        else if (val === 'fast') animationSpeed = regularSpeed - 13;
-
+        if (val === 'slow') animationSpeed = 50;
+        else if (val === 'fast') animationSpeed = 1;
     }
+
     handleEnable(){
         const disableList = document.getElementsByClassName('mayDisable');
         for (let i = 0;i< disableList.length; i++){
@@ -63,24 +70,17 @@ export default class SortingVisualizer extends Component {
         }
     }
 
-    
-    //O(n^2) sort 
-    bubbleSort(){
-    }
-    selectionSort(){
-    }
-    insertionSort(){
-    }
+    /////////////////////////////////////////// SORTING ///////////////////
     //O(nlogn) sort 
     mergeSort(){ 
         const animations = getMergeSortAnimations(this.state.array);
         for (let i = 0; i < animations.length; i++) {
             const arrayBars = document.getElementsByClassName('array-bar');
-            const isColorChange = i % 3 !== 2;
             // every three values is a set 
-            // if first value - change color
-            // if second value - change color back 
-            if (isColorChange) { 
+            // if first  - change color
+            // if second  - change color back 
+            // if third - overwrite 
+            if (i % 3 === 0 || i % 3 === 1) { 
                 const [barOneIdx, barTwoIdx] = animations[i];
                 const barOneStyle = arrayBars[barOneIdx].style;
                 const barTwoStyle = arrayBars[barTwoIdx].style;
@@ -89,16 +89,100 @@ export default class SortingVisualizer extends Component {
                 barOneStyle.backgroundColor = color;
                 barTwoStyle.backgroundColor = color;
                 }, i * animationSpeed);
-            } else {
+            } else { 
                 setTimeout(() => {
-                const [barOneIdx, newHeight] = animations[i];
-                const barOneStyle = arrayBars[barOneIdx].style;
-                barOneStyle.height = `${newHeight}px`;
+                const [barIdx, newHeight] = animations[i];
+                const barStyle = arrayBars[barIdx].style;
+                barStyle.height = `${newHeight}px`;
                 }, i * animationSpeed);
             }
         }
         console.log('after merge sort', this.state.array);
     }
+    //O(n^2) sort 
+    bubbleSort(){
+        const animations = getBubbleSortAnimations(this.state.array);
+        for (let i = 0; i < animations.length; i++) {
+            const arrayBars = document.getElementsByClassName('array-bar');
+            if (i % 4 === 0 || i % 4 === 1) { 
+                const [barOneIdx, barTwoIdx] = animations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                const color = i % 4 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+                setTimeout(() => {
+                barOneStyle.backgroundColor = color;
+                barTwoStyle.backgroundColor = color;
+                }, i * animationSpeed);
+            } else { 
+                const [barIdx, newHeight] = animations[i];
+                if (barIdx === -1) continue;
+                setTimeout(() => {
+                const barStyle = arrayBars[barIdx].style;
+                barStyle.height = `${newHeight}px`;
+                }, i * animationSpeed);
+            }
+
+        }
+        console.log('after bubble sort', this.state.array);
+    }
+    selectionSort(){
+        const animations = getSelectionSortAnimations(this.state.array);
+       
+        for (let i = 0; i < animations.length; i++) {
+            const arrayBars = document.getElementsByClassName('array-bar');
+            if(animations[i][0] === 1 || animations[i][0] === 2) {
+                const color = (animations[i][0] === 1) ? SECONDARY_COLOR : PRIMARY_COLOR;
+                const barOneIdx = animations[i][1];
+                const barTwoIdx = animations[i][2];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = color;
+                    barTwoStyle.backgroundColor = color;
+                },i * animationSpeed);
+            }
+            else {
+                const barIdx = animations[i][1];
+                const newHeight = animations[i][2];
+                const barStyle = arrayBars[barIdx].style;
+                setTimeout(() => {
+                    barStyle.height = `${newHeight}px`;
+                },i * animationSpeed);  
+            }
+        }
+
+        console.log('after selection sort', this.state.array);
+    }
+
+    insertionSort(){
+        const animations = getInsertionSortAnimations(this.state.array);
+
+        for (let i = 0; i < animations.length; i++) {
+            const arrayBars = document.getElementsByClassName('array-bar');
+            if(animations[i][0] === 1 || animations[i][0] === 2) {
+                const color = animations[i][0] === 1 ? SECONDARY_COLOR : PRIMARY_COLOR;
+                const barOneIdx = animations[i][1];
+                const barTwoIdx = animations[i][2];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = color;
+                    barTwoStyle.backgroundColor = color;
+                },i * animationSpeed);
+            }
+            else {
+                const barIdx = animations[i][1];
+                const newHeight = animations[i][2];
+                const barStyle = arrayBars[barIdx].style;
+                setTimeout(() => {
+                    barStyle.height = `${newHeight}px`;
+                },i * animationSpeed);  
+            }
+        }
+        console.log('after insertion sort', this.state.array);
+
+    }
+    
     quickSort(){
     }
     heapSort(){
@@ -107,43 +191,51 @@ export default class SortingVisualizer extends Component {
     render() {
         console.log('before sorting', this.state.array);
         return (
+          
             <div className = 'array-container'>
+                <h1 className = 'header'> Welcome to the Sorting Visualizer</h1> 
+                <div className = 'info-panel'>
+                    <span className = 'color1'>  </span>
+                    <span> Original Color of the Bars </span>
+                    <span className = 'color2'>  </span>
+                    <span> Color of the Bars Being Processed Now </span>
+                </div>
+
                 {this.state.array.map((num, idx) =>{
                     return <div className = 'array-bar' key = {idx} style={{height: `${num}px`, backgroundColor : PRIMARY_COLOR}}>
                     </div>
                 })}
-                <div className = 'user-choice'>
-                    <p>Click the button to generate a random array of length 50: 
-                    <button className = 'mayDisable' onClick = {() => this.generateArray()}> Generate A New Array</button>
-                    </p>
+                   
+                <p >Click the button to generate a random array of length 50: 
+                <button className = 'mayDisable' onClick = {() => this.generateArray()}> Generate A New Array</button>
+                </p>
 
-                    <p>Choose your preferred speed (Default: Normal): 
-                    <select  className = 'mayDisable' onChange = {(e) => this.handleSelectionSpeed(e)}>
-                        <option value = 'slow'> Slow</option>
-                        <option id = 'normal-speed' value = 'normal' selected> Normal</option>
-                        <option value = 'fast'> Fast</option>
-                    </select>
-                    </p>
-                    
-                    <p>Choose your sorting algorithm: 
-                    <select className = 'mayDisable' onChange = {(e) => this.handleSlection1(e)}>
-                        <option id = "slower-algo" value = 'original'>  Avg. O(N^2) time </option>
-                        <option value = 'bubbleSort'> Bubble Sort</option>
-                        <option value = 'selectionSort'> Selection Sort</option>
-                    </select>
-                    <select  className = 'mayDisable' onChange = {(e) => this.handleSelection2(e)}>
-                        <option id = 'faster-algo' value = 'original'> Ave. O(N*LogN) time  </option>
-                        <option value = 'mergeSort'> Merge Sort</option>
-                        <option value = 'quickSort'> Quick Sort</option>
-                    </select>
-                    </p>
-                  
-                    <p>Click the button when you are finished and want to start another round: 
-                    <button id = 'restart-btn' onClick = {() => this.handleEnable()}> Start Over</button>
-                    </p>
-
-
-                </div>
+                <p>Choose your preferred speed (Default: Normal): 
+                <select  id = 'choose-speed'className = 'mayDisable' defaultValue = 'normal' onChange = {(e) => this.handleSelectionSpeed(e)}>
+                    <option value = 'slow'> Slow</option>
+                    <option  value = 'normal' > Normal</option>
+                    <option value = 'fast'> Fast</option>
+                </select>
+                </p>
+                
+                <p>Choose your sorting algorithm: 
+                <select id = 'slower-algo' className = 'mayDisable' onChange = {(e) => this.handleSelection1(e)}>
+                    <option value = 'default'>  Avg. O(N^2) time </option>
+                    <option value = 'bubbleSort'> Run Bubble Sort</option>
+                    <option value = 'selectionSort'>Run Selection Sort</option>
+                    <option value = 'insertionSort'>Run Insertion Sort</option>
+                </select>
+                <select  id = 'faster-algo' className = 'mayDisable' onChange = {(e) => this.handleSelection2(e)}>
+                    <option  value = 'default'> Avg. O(N*LogN) time  </option>
+                    <option value = 'mergeSort' > Run Merge Sort</option>
+                    <option value = 'quickSort'> Run Quick Sort</option>
+                </select>
+                </p>
+                
+                <p >Click the button when you are finished and want to start another round: 
+                <button id = 'restart-btn' onClick = {() => this.handleEnable()}> Start Over</button>
+                </p>
+ 
             </div>
         )
     }

@@ -1,6 +1,6 @@
 export function getMergeSortAnimations(array) { // returns an animation array 
     if (array.length <= 1) return array;
-    const animations = [];
+    const animations = []; // array of arrays
     const helperArray = [];
     mergeSortHelper(array, helperArray, 0, array.length - 1, animations);
     return animations;
@@ -39,7 +39,7 @@ function merge(array, helperArray, left, right, animations) {
         array[k++] = helperArray[j++];
       }
     }
-    // remaining elements are on the left side 
+    // if remaining elements are on the left side 
     while (i <= mid) {
       animations.push([i, i]);
       animations.push([i, i]);

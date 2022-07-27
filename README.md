@@ -1,5 +1,15 @@
-Fascinated by the variety of sorting algorithm and insired by Clement Mihailescu, ...........
+Fascinated by the varieties of sorting algorithms and insired by Clement Mihailescu's project idea, I decided to build a visualization tool for many common sorting algorithms including: ......
 
+You can access this visualizer using this link: ............
+
+To be implemted: 
+
+- Let the user choose how many bars they want (i.e., the length of the array)
+- Add a stop button so that user can stop any program that is currently running 
+- Add some explanations to each sort algorithms 
+- Extend to include more sorting algorithms like .....
+
+----------------------------------------------------------------------------------------
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
